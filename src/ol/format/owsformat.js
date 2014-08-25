@@ -331,6 +331,17 @@ ol.format.OWS.readValue_ = function(node, objectStack) {
 
 
 /**
+ * @param {Node} node Node.
+ * @param {string} title Title.
+ * @private
+ */
+ol.format.OWS.writeTitle_ = function(node, title) {
+  console.log('write title');
+  ol.format.XSD.writeStringTextNode(node, title);
+};
+
+
+/**
  * @const
  * @type {Array.<string>}
  */
@@ -553,4 +564,15 @@ ol.format.OWS.SERVICE_PROVIDER_PARSERS_ =
           'providerSite'),
       'ServiceContact': ol.xml.makeObjectPropertySetter(
           ol.format.OWS.readServiceContact_, 'serviceContact')
+    });
+
+
+/**
+ * @const
+ * @type {Object.<string, Object.<string, ol.xml.Serializer>>}
+ */
+ol.format.OWS.SERIALIZERS = ol.xml.makeStructureNS(
+    ol.format.OWS.NAMESPACE_URIS, {
+      'Title': ol.xml.makeChildAppender(ol.format.XSD.writeStringTextNode),
+      'BoundingBox': ol.xml.makeChildAppender(ol.format.XSD.writeStringTextNode)
     });

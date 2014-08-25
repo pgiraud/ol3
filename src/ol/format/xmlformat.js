@@ -46,3 +46,10 @@ ol.format.XML.prototype.readFromDocument = goog.abstractMethod;
  * @return {Object}
  */
 ol.format.XML.prototype.readFromNode = goog.abstractMethod;
+
+
+/**
+ * @param {Object} obj Object.
+ * @return {Node}
+ */
+ol.format.XML.prototype.write = goog.abstractMethod;
