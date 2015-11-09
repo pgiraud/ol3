@@ -82,8 +82,7 @@ var map = new ol.Map({
 });
 
 vectorSource.on('change', function() {
-  var feature = vectorSource.getFeatures()[0];
-  map.getView().fit(feature.getGeometry(), map.getSize());
+  map.getView().fit(vectorSource.getExtent(), map.getSize());
 });
 
 $('#start').click(function(evt) {
