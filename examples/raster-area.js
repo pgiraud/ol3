@@ -22,17 +22,18 @@ var rasterExtent = [600000, 196000, 602000, 198000];
 var rasterSize = [1000, 1000];
 var rasterMinValue = 4.0;
 var rasterMaxValue = 10.7848;
+var precision = 16;
 
 var RESOLUTION = Math.max(
   ol.extent.getWidth(rasterExtent) / rasterSize[0],
   ol.extent.getHeight(rasterExtent) / rasterSize[1]
   );
 
-var getMapSize = function(extent) {
+var getMapSize = function(extent, resolution) {
   // Make it so the size is 20% bigger than needed to prevent borders effects
   return [
-    ol.extent.getWidth(extent) / RESOLUTION * 1.2,
-    ol.extent.getHeight(extent) / RESOLUTION * 1.2
+    ol.extent.getWidth(extent) / resolution * 1.2,
+    ol.extent.getHeight(extent) / resolution * 1.2
   ];
 };
 
@@ -133,8 +134,9 @@ var getVectorContext = function(polygon, callback) {
 };
 
 var getMapContext = function(polygon, layer, callback) {
+  var mapResolution = RESOLUTION / precision;
   var polygonExtent = polygon.getGeometry().getExtent();
-  var mapSize = getMapSize(polygonExtent);
+  var mapSize = getMapSize(polygonExtent, mapResolution);
 
   var mapContainer = document.createElement('div');
   $(mapContainer).width(mapSize[0]);
@@ -149,9 +151,9 @@ var getMapContext = function(polygon, layer, callback) {
     target: mapContainer,
     view: new ol.View({
       projection: projection,
-      resolutions: [RESOLUTION],
+      resolutions: [mapResolution],
       center: ol.extent.getCenter(polygonExtent),
-      resolution: RESOLUTION
+      resolution: mapResolution
     })
   });
 
@@ -226,6 +228,7 @@ var calculate = function(rasterContext, vectorContext) {
     }
   }
   console.log(area);
+  console.log(area / Math.pow(precision, 2));
 };
 
 var debugShow = function(imageData, width, height) {
