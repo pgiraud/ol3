@@ -126,7 +126,7 @@ var getVectorContext = function(polygon, callback) {
     source: polygonSource,
     style: new ol.style.Style({
       fill: new ol.style.Fill({
-        color: 'rgb(255, 255, 255)'
+        color: 'rgb(0, 0, 0)'
       })
     })
   });
