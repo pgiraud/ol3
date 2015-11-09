@@ -193,6 +193,7 @@ var calculate = function(rasterContext, vectorContext) {
   console.log('Starting calculation');
   var width = rasterContext.size[0];
   var height = rasterContext.size[1];
+  var pixelRatio = rasterContext.pixelRatio;
 
   debugShow(vectorContext.imageData, width, height);
   debugShow(rasterContext.imageData, width, height);
@@ -204,17 +205,16 @@ var calculate = function(rasterContext, vectorContext) {
   var vectorData = vectorContext.imageData.data;
   var rasterData = rasterContext.imageData.data;
   var area = 0;
-  for (var x = 0; x < width; x++) {
-    for (var y = 0; y < height; y++) {
+  var x;
+  var y;
+  for (x = 0; x < width; x++) {
+    for (y = 0; y < height; y++) {
       var vectorValueAlpha = vectorData[((x * (width * 4)) + (y * 4) + 3)];
       if (vectorValueAlpha > 0) {
         var rasterValueRed = rasterData[((x * (width * 4)) + (y * 4))];
 
-        // "simple" area
-        // area += 4.0;
-
-        // scaled "simple" area
-        area += vectorValueAlpha / 255 * 4.0;
+        // projected "simple" area
+        area += vectorValueAlpha / 255 * 4.0 / (pixelRatio * pixelRatio);
 
         // real area
         // area += convertToArea(rasterValueRed);
