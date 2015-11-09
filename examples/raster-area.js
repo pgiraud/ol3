@@ -22,7 +22,7 @@ var rasterExtent = [600000, 196000, 602000, 198000];
 var rasterSize = [1000, 1000];
 var rasterMinValue = 4.0;
 var rasterMaxValue = 10.7848;
-var precision = 16;
+var precision = 4;
 
 var RESOLUTION = Math.max(
   ol.extent.getWidth(rasterExtent) / rasterSize[0],
@@ -31,9 +31,10 @@ var RESOLUTION = Math.max(
 
 var getMapSize = function(extent, resolution) {
   // Make it so the size is 20% bigger than needed to prevent borders effects
+  var ratio = 1.2;
   return [
-    ol.extent.getWidth(extent) / resolution * 1.2,
-    ol.extent.getHeight(extent) / resolution * 1.2
+    ol.extent.getWidth(extent) / resolution * ratio,
+    ol.extent.getHeight(extent) / resolution * ratio
   ];
 };
 
