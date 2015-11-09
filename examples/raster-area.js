@@ -29,9 +29,10 @@ var RESOLUTION = Math.max(
   );
 
 var getMapSize = function(extent) {
+  // Make it so the size is 20% bigger than needed to prevent borders effects
   return [
-    ol.extent.getWidth(extent) / RESOLUTION,
-    ol.extent.getHeight(extent) / RESOLUTION
+    ol.extent.getWidth(extent) / RESOLUTION * 1.2,
+    ol.extent.getHeight(extent) / RESOLUTION * 1.2
   ];
 };
 
