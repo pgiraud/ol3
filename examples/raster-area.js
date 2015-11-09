@@ -67,11 +67,6 @@ var map = new ol.Map({
     }),
     vectorLayer
   ],
-  controls: ol.control.defaults({
-    attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
-      collapsible: false
-    })
-  }),
   target: 'map',
   view: new ol.View({
     resolutions: [
