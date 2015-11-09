@@ -39,7 +39,7 @@ var getMapSize = function(extent, resolution) {
 
 var vectorSource = new ol.source.Vector({
   format: new ol.format.GeoJSON(),
-  url: 'data/triangle.geojson'
+  url: 'data/raster-area.geojson'
 });
 
 var vectorLayer = new ol.layer.Vector({
@@ -83,28 +83,27 @@ var map = new ol.Map({
 
 vectorSource.on('change', function() {
   map.getView().fit(vectorSource.getExtent(), map.getSize());
+  vectorSource.getFeatures().forEach(computeAreas);
 });
 
-$('#start').click(function(evt) {
+var computeAreas = function(feature) {
   var rasterContext = null;
   var vectorContext = null;
 
-  var polygon = vectorSource.getFeatures()[0];
-
-  getRasterContext(polygon, function(canvasContext) {
+  getRasterContext(feature, function(canvasContext) {
     rasterContext = canvasContext;
-    if (rasterContext !== null && vectorContext != null) {
-      calculate(rasterContext, vectorContext);
+    if (rasterContext !== null && vectorContext !== null) {
+      calculate(rasterContext, vectorContext, feature);
     }
   });
 
-  getVectorContext(polygon, function(canvasContext) {
+  getVectorContext(feature, function(canvasContext) {
     vectorContext = canvasContext;
-    if (rasterContext !== null && vectorContext != null) {
-      calculate(rasterContext, vectorContext);
+    if (rasterContext !== null && vectorContext !== null) {
+      calculate(rasterContext, vectorContext, feature);
     }
   });
-});
+};
 
 var getRasterContext = function(polygon, callback) {
   var rasterSource = new ol.source.ImageStatic({
@@ -191,8 +190,7 @@ var getMapContext = function(polygon, layer, callback) {
 };
 
 
-var calculate = function(rasterContext, vectorContext) {
-  console.log('Starting calculation');
+var calculate = function(rasterContext, vectorContext, feature) {
   var width = rasterContext.size[0];
   var height = rasterContext.size[1];
   var pixelRatio = rasterContext.pixelRatio;
@@ -226,8 +224,9 @@ var calculate = function(rasterContext, vectorContext) {
       }
     }
   }
-  console.log(area);
-  console.log(area / Math.pow(precision, 2));
+  var rasterProjectedArea = area / Math.pow(precision, 2);
+  console.log (feature.get('name'), "Area:", feature.getGeometry().getArea(),
+      "Projected raster area:", rasterProjectedArea);
 };
 
 var debugShow = function(imageData, width, height) {
